@@ -236,6 +236,7 @@
   "recaptcha.enabled": false,
   "recaptcha.api_url": "https://www.google.com/recaptcha/api.js",
   "recaptcha.verify_url": "https://www.google.com/recaptcha/api/siteverify",
+  "apim.ws.enable": true,
   "apim.ws.port" : "9099",
   "apim.ws.dispatch.sequence" : "dispatchSeq",
   "apim.ws.dispatch.on_error.sequence" : "fault",
