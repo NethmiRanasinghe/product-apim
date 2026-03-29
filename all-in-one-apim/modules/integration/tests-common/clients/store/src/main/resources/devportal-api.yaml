@@ -400,6 +400,35 @@ paths:
         - $ref: '#/components/parameters/environmentName'
         - $ref: '#/components/parameters/If-None-Match'
         - $ref: '#/components/parameters/requestedTenant'
+        - name: format
+          in: query
+          description: |
+            If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip.
+          required: false
+          schema:
+            type: string
+        - name: exp
+          in: query
+          description: |
+            Time of expiration of the generated URL.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: sig
+          in: query
+          description: |
+            Signature to validate of the generated URL.
+          required: false
+          schema:
+            type: string
+        - name: X-WSO2-Tenant-Q
+          in: query
+          description: |
+            For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be
+              retrieved from.
+          schema:
+            type: string
       responses:
         200:
           description: |
@@ -434,6 +463,44 @@ paths:
           source: curl -k "https://localhost:9443/api/am/devportal/v3/apis/c43a325c-260b-4302-81cb-768eafaa3aed/wsdl"
       x-examples:
         $ref: docs/examples/apis/wsdl/apiId_wsdl_get.yaml
+
+  /apis/{apiId}/generate-definition-url:
+    post:
+      tags:
+        - APIs
+      summary: Generate a URL to download a resource for an API
+      description: >-
+        Generate a URL to access an API resource like the WSDL definition.
+      operationId: generateDefinitionURL
+      parameters:
+        - name: type
+          in: query
+          description: Type of the resource to be retrieved using the generated url (Ex - wsdl)
+          required: true
+          schema:
+            type: string
+            enum:
+              - wsdl
+        - $ref: '#/components/parameters/environmentName'
+        - $ref: '#/components/parameters/apiId'
+        - $ref: '#/components/parameters/requestedTenant'
+      responses:
+        '200':
+          description: OK. Returns generated download URL as a string.
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - OAuth2Security: [ ]
 
   ######################################################
   # The "Document Collection" resource APIs

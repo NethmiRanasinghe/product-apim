@@ -82,6 +82,7 @@ import org.wso2.am.integration.clients.store.api.v1.dto.TopicListDTO;
 import org.wso2.am.integration.clients.store.api.v1.dto.WebhookSubscriptionListDTO;
 import org.wso2.am.integration.test.ClientAuthenticator;
 import org.wso2.am.integration.test.Constants;
+import org.wso2.am.integration.test.utils.APIMTestConstants;
 import org.wso2.am.integration.test.utils.APIManagerIntegrationTestException;
 import org.wso2.am.integration.test.utils.http.HTTPSClientUtils;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
@@ -2187,10 +2188,54 @@ public class RestAPIStoreImpl {
         }
     }
 
+    /**
+     * Download WSDL schema definition of an API
+     *
+     * @param apiId           - API ID
+     * @param environmentName  - Environment name
+     * @return - http response of download WSDL schema definition of an API
+     * @throws ApiException if failed to download WSDL schema definition of an API
+     */
     public ApiResponse<Void> downloadWSDLSchemaDefinitionOfAPI(String apiId, String environmentName)
             throws ApiException {
-        ApiResponse<Void> apiDtoApiResponse = apIsApi.getWSDLOfAPIWithHttpInfo(apiId, environmentName,
-                null, this.tenantDomain);
+        ApiResponse<Void> apiDtoApiResponse = apIsApi.getWSDLOfAPIWithHttpInfo(apiId, environmentName, null, this.tenantDomain,
+                null, null, null, null);
+        Assert.assertEquals(HttpStatus.SC_OK, apiDtoApiResponse.getStatusCode());
+        return apiDtoApiResponse;
+    }
+
+    /**
+     * Get WSDL schema definition of an API when exp and sig parameters are present in the request
+     *
+     * @param apiId           - API ID
+     * @param environmentName  - Environment name
+     * @param exp              - Expire time of the generated signature
+     * @param sig              - Signature generated using the shared secret and the expire time
+     * @return - http response of download WSDL schema definition of an API
+     * @throws ApiException if failed to download WSDL schema definition of an API
+     */
+    public ApiResponse<Void> viewWSDLSchemaDefinitionOfAPI(String apiId, String environmentName, Long exp, String sig,
+            String XWSO2TenantQ) throws ApiException {
+        ApiResponse<Void> apiDtoApiResponse;
+        if ("carbon.super".equals(this.tenantDomain)) {
+            // Since the tenant domain is NOT passed as a query parameter, but as a header for super tenant
+            // the API call should be made without XWSO2TenantQ but with XWSO2Tenant
+            apiDtoApiResponse = apIsApi.getWSDLOfAPIWithHttpInfo(apiId, environmentName, null, this.tenantDomain, null,
+                    exp, sig, null);
+        } else {
+            // Since the tenant domain is passed as a query parameter, but NOT as a header for other tenant
+            // the API call should be made with XWSO2TenantQ
+            apiDtoApiResponse = apIsApi.getWSDLOfAPIWithHttpInfo(apiId, environmentName, null, null, null,
+                    exp, sig, XWSO2TenantQ);
+        }
+        Assert.assertEquals(HttpStatus.SC_OK, apiDtoApiResponse.getStatusCode());
+        return apiDtoApiResponse;
+    }
+
+    public ApiResponse<String> generateWSDLUrlOfAPI(String apiId, String environmentName)
+            throws ApiException {
+        ApiResponse<String> apiDtoApiResponse = apIsApi.generateDefinitionURLWithHttpInfo("wsdl", apiId, environmentName,
+                this.tenantDomain);
         Assert.assertEquals(HttpStatus.SC_OK, apiDtoApiResponse.getStatusCode());
         return apiDtoApiResponse;
     }

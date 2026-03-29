@@ -671,6 +671,44 @@ paths:
         schema:
           type: string
         style: simple
+      - description: |
+          If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip.
+        explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          Time of expiration of the generated URL.
+        explode: true
+        in: query
+        name: exp
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: |
+          Signature to validate of the generated URL.
+        explode: true
+        in: query
+        name: sig
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be
+            retrieved from.
+        explode: true
+        in: query
+        name: X-WSO2-Tenant-Q
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content: {}
@@ -732,6 +770,112 @@ paths:
         source: curl -k "https://localhost:9443/api/am/devportal/v3/apis/c43a325c-260b-4302-81cb-768eafaa3aed/wsdl"
       x-examples:
         $ref: docs/examples/apis/wsdl/apiId_wsdl_get.yaml
+      x-accepts: application/json
+  /apis/{apiId}/generate-definition-url:
+    post:
+      description: Generate a URL to access an API resource like the WSDL definition.
+      operationId: generateDefinitionURL
+      parameters:
+      - description: Type of the resource to be retrieved using the generated url
+          (Ex - wsdl)
+        explode: true
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - wsdl
+          type: string
+        style: form
+      - description: |
+          Name of the API gateway environment.
+        explode: true
+        in: query
+        name: environmentName
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          **API ID** consisting of the **UUID** of the API.
+        explode: false
+        in: path
+        name: apiId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: |
+          For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be
+            retrieved from.
+        explode: false
+        in: header
+        name: X-WSO2-Tenant
+        required: false
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: OK. Returns generated download URL as a string.
+        "400":
+          content:
+            application/json:
+              example:
+                code: 400
+                message: Bad Request
+                description: Invalid request or validation error
+                moreInfo: ""
+                error: []
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request. Invalid request or validation error.
+        "401":
+          content:
+            application/json:
+              example:
+                code: 401
+                message: Unauthorized
+                description: The user is not authorized
+                moreInfo: ""
+                error: []
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized. The user is not authorized.
+        "404":
+          content:
+            application/json:
+              example:
+                code: 404
+                message: Not Found
+                description: The specified resource does not exist
+                moreInfo: ""
+                error: []
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found. The specified resource does not exist.
+        "500":
+          content:
+            application/json:
+              example:
+                code: 500
+                message: Internal Server Error
+                description: The server encountered an internal error. Please contact
+                  administrator.
+                moreInfo: ""
+                error: []
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error.
+      security:
+      - OAuth2Security: []
+      summary: Generate a URL to download a resource for an API
+      tags:
+      - APIs
       x-accepts: application/json
   /apis/{apiId}/documents:
     get:

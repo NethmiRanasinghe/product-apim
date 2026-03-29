@@ -898,11 +898,171 @@ public class ApIsApi {
         return localVarCall;
     }
     /**
+     * Build call for generateDefinitionURL
+     * @param type Type of the resource to be retrieved using the generated url (Ex - wsdl) (required)
+     * @param apiId **API ID** consisting of the **UUID** of the API.  (required)
+     * @param environmentName Name of the API gateway environment.  (optional)
+     * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK. Returns generated download URL as a string. </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Bad Request. Invalid request or validation error. </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Unauthorized. The user is not authorized. </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Not Found. The specified resource does not exist. </td><td>  -  </td></tr>
+        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call generateDefinitionURLCall(String type, String apiId, String environmentName, String xWSO2Tenant, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/apis/{apiId}/generate-definition-url"
+            .replaceAll("\\{" + "apiId" + "\\}", localVarApiClient.escapeString(apiId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        if (type != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("type", type));
+        }
+
+        if (environmentName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("environmentName", environmentName));
+        }
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        if (xWSO2Tenant != null) {
+            localVarHeaderParams.put("X-WSO2-Tenant", localVarApiClient.parameterToString(xWSO2Tenant));
+        }
+
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "OAuth2Security" };
+        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call generateDefinitionURLValidateBeforeCall(String type, String apiId, String environmentName, String xWSO2Tenant, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'type' is set
+        if (type == null) {
+            throw new ApiException("Missing the required parameter 'type' when calling generateDefinitionURL(Async)");
+        }
+        
+        // verify the required parameter 'apiId' is set
+        if (apiId == null) {
+            throw new ApiException("Missing the required parameter 'apiId' when calling generateDefinitionURL(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = generateDefinitionURLCall(type, apiId, environmentName, xWSO2Tenant, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * Generate a URL to download a resource for an API
+     * Generate a URL to access an API resource like the WSDL definition.
+     * @param type Type of the resource to be retrieved using the generated url (Ex - wsdl) (required)
+     * @param apiId **API ID** consisting of the **UUID** of the API.  (required)
+     * @param environmentName Name of the API gateway environment.  (optional)
+     * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @return String
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK. Returns generated download URL as a string. </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Bad Request. Invalid request or validation error. </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Unauthorized. The user is not authorized. </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Not Found. The specified resource does not exist. </td><td>  -  </td></tr>
+        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
+     </table>
+     */
+    public String generateDefinitionURL(String type, String apiId, String environmentName, String xWSO2Tenant) throws ApiException {
+        ApiResponse<String> localVarResp = generateDefinitionURLWithHttpInfo(type, apiId, environmentName, xWSO2Tenant);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Generate a URL to download a resource for an API
+     * Generate a URL to access an API resource like the WSDL definition.
+     * @param type Type of the resource to be retrieved using the generated url (Ex - wsdl) (required)
+     * @param apiId **API ID** consisting of the **UUID** of the API.  (required)
+     * @param environmentName Name of the API gateway environment.  (optional)
+     * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @return ApiResponse&lt;String&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK. Returns generated download URL as a string. </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Bad Request. Invalid request or validation error. </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Unauthorized. The user is not authorized. </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Not Found. The specified resource does not exist. </td><td>  -  </td></tr>
+        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<String> generateDefinitionURLWithHttpInfo(String type, String apiId, String environmentName, String xWSO2Tenant) throws ApiException {
+        okhttp3.Call localVarCall = generateDefinitionURLValidateBeforeCall(type, apiId, environmentName, xWSO2Tenant, null);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Generate a URL to download a resource for an API (asynchronously)
+     * Generate a URL to access an API resource like the WSDL definition.
+     * @param type Type of the resource to be retrieved using the generated url (Ex - wsdl) (required)
+     * @param apiId **API ID** consisting of the **UUID** of the API.  (required)
+     * @param environmentName Name of the API gateway environment.  (optional)
+     * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK. Returns generated download URL as a string. </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Bad Request. Invalid request or validation error. </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Unauthorized. The user is not authorized. </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Not Found. The specified resource does not exist. </td><td>  -  </td></tr>
+        <tr><td> 500 </td><td> Internal Server Error. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call generateDefinitionURLAsync(String type, String apiId, String environmentName, String xWSO2Tenant, final ApiCallback<String> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = generateDefinitionURLValidateBeforeCall(type, apiId, environmentName, xWSO2Tenant, _callback);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
      * Build call for getWSDLOfAPI
      * @param apiId **API ID** consisting of the **UUID** of the API.  (required)
      * @param environmentName Name of the API gateway environment.  (optional)
      * @param ifNoneMatch Validator for conditional requests; based on the ETag of the formerly retrieved variant of the resourec.  (optional)
      * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @param format If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip.  (optional)
+     * @param exp Time of expiration of the generated URL.  (optional)
+     * @param sig Signature to validate of the generated URL.  (optional)
+     * @param xWSO2TenantQ For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -915,7 +1075,7 @@ public class ApIsApi {
         <tr><td> 406 </td><td> Not Acceptable. The requested media type is not supported. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getWSDLOfAPICall(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getWSDLOfAPICall(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, String format, Long exp, String sig, String xWSO2TenantQ, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -926,6 +1086,22 @@ public class ApIsApi {
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
         if (environmentName != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("environmentName", environmentName));
+        }
+
+        if (format != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("format", format));
+        }
+
+        if (exp != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("exp", exp));
+        }
+
+        if (sig != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("sig", sig));
+        }
+
+        if (xWSO2TenantQ != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("X-WSO2-Tenant-Q", xWSO2TenantQ));
         }
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
@@ -958,7 +1134,7 @@ public class ApIsApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call getWSDLOfAPIValidateBeforeCall(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getWSDLOfAPIValidateBeforeCall(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, String format, Long exp, String sig, String xWSO2TenantQ, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'apiId' is set
         if (apiId == null) {
@@ -966,7 +1142,7 @@ public class ApIsApi {
         }
         
 
-        okhttp3.Call localVarCall = getWSDLOfAPICall(apiId, environmentName, ifNoneMatch, xWSO2Tenant, _callback);
+        okhttp3.Call localVarCall = getWSDLOfAPICall(apiId, environmentName, ifNoneMatch, xWSO2Tenant, format, exp, sig, xWSO2TenantQ, _callback);
         return localVarCall;
 
     }
@@ -978,6 +1154,10 @@ public class ApIsApi {
      * @param environmentName Name of the API gateway environment.  (optional)
      * @param ifNoneMatch Validator for conditional requests; based on the ETag of the formerly retrieved variant of the resourec.  (optional)
      * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @param format If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip.  (optional)
+     * @param exp Time of expiration of the generated URL.  (optional)
+     * @param sig Signature to validate of the generated URL.  (optional)
+     * @param xWSO2TenantQ For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -988,8 +1168,8 @@ public class ApIsApi {
         <tr><td> 406 </td><td> Not Acceptable. The requested media type is not supported. </td><td>  -  </td></tr>
      </table>
      */
-    public void getWSDLOfAPI(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant) throws ApiException {
-        getWSDLOfAPIWithHttpInfo(apiId, environmentName, ifNoneMatch, xWSO2Tenant);
+    public void getWSDLOfAPI(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, String format, Long exp, String sig, String xWSO2TenantQ) throws ApiException {
+        getWSDLOfAPIWithHttpInfo(apiId, environmentName, ifNoneMatch, xWSO2Tenant, format, exp, sig, xWSO2TenantQ);
     }
 
     /**
@@ -999,6 +1179,10 @@ public class ApIsApi {
      * @param environmentName Name of the API gateway environment.  (optional)
      * @param ifNoneMatch Validator for conditional requests; based on the ETag of the formerly retrieved variant of the resourec.  (optional)
      * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @param format If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip.  (optional)
+     * @param exp Time of expiration of the generated URL.  (optional)
+     * @param sig Signature to validate of the generated URL.  (optional)
+     * @param xWSO2TenantQ For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -1010,8 +1194,8 @@ public class ApIsApi {
         <tr><td> 406 </td><td> Not Acceptable. The requested media type is not supported. </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> getWSDLOfAPIWithHttpInfo(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant) throws ApiException {
-        okhttp3.Call localVarCall = getWSDLOfAPIValidateBeforeCall(apiId, environmentName, ifNoneMatch, xWSO2Tenant, null);
+    public ApiResponse<Void> getWSDLOfAPIWithHttpInfo(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, String format, Long exp, String sig, String xWSO2TenantQ) throws ApiException {
+        okhttp3.Call localVarCall = getWSDLOfAPIValidateBeforeCall(apiId, environmentName, ifNoneMatch, xWSO2Tenant, format, exp, sig, xWSO2TenantQ, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -1022,6 +1206,10 @@ public class ApIsApi {
      * @param environmentName Name of the API gateway environment.  (optional)
      * @param ifNoneMatch Validator for conditional requests; based on the ETag of the formerly retrieved variant of the resourec.  (optional)
      * @param xWSO2Tenant For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
+     * @param format If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip.  (optional)
+     * @param exp Time of expiration of the generated URL.  (optional)
+     * @param sig Signature to validate of the generated URL.  (optional)
+     * @param xWSO2TenantQ For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -1034,9 +1222,9 @@ public class ApIsApi {
         <tr><td> 406 </td><td> Not Acceptable. The requested media type is not supported. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getWSDLOfAPIAsync(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getWSDLOfAPIAsync(String apiId, String environmentName, String ifNoneMatch, String xWSO2Tenant, String format, Long exp, String sig, String xWSO2TenantQ, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = getWSDLOfAPIValidateBeforeCall(apiId, environmentName, ifNoneMatch, xWSO2Tenant, _callback);
+        okhttp3.Call localVarCall = getWSDLOfAPIValidateBeforeCall(apiId, environmentName, ifNoneMatch, xWSO2Tenant, format, exp, sig, xWSO2TenantQ, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

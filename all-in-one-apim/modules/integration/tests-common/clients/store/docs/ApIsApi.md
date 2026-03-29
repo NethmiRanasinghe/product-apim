@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**apisApiIdSwaggerGet**](ApIsApi.md#apisApiIdSwaggerGet) | **GET** /apis/{apiId}/swagger | Get Swagger Definition 
 [**apisApiIdThumbnailGet**](ApIsApi.md#apisApiIdThumbnailGet) | **GET** /apis/{apiId}/thumbnail | Get Thumbnail Image
 [**apisGet**](ApIsApi.md#apisGet) | **GET** /apis | Retrieve/Search APIs 
+[**generateDefinitionURL**](ApIsApi.md#generateDefinitionURL) | **POST** /apis/{apiId}/generate-definition-url | Generate a URL to download a resource for an API
 [**getWSDLOfAPI**](ApIsApi.md#getWSDLOfAPI) | **GET** /apis/{apiId}/wsdl | Get API WSDL definition
 
 
@@ -459,9 +460,86 @@ Name | Type | Description  | Notes
 **200** | OK. List of qualifying APIs is returned.  |  -  |
 **406** | Not Acceptable. The requested media type is not supported. |  -  |
 
+<a name="generateDefinitionURL"></a>
+# **generateDefinitionURL**
+> String generateDefinitionURL(type, apiId, environmentName, xWSO2Tenant)
+
+Generate a URL to download a resource for an API
+
+Generate a URL to access an API resource like the WSDL definition.
+
+### Example
+```java
+// Import classes:
+import org.wso2.am.integration.clients.store.api.ApiClient;
+import org.wso2.am.integration.clients.store.api.ApiException;
+import org.wso2.am.integration.clients.store.api.Configuration;
+import org.wso2.am.integration.clients.store.api.auth.*;
+import org.wso2.am.integration.clients.store.api.models.*;
+import org.wso2.am.integration.clients.store.api.v1.ApIsApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://apis.wso2.com/api/am/devportal/v3");
+    
+    // Configure OAuth2 access token for authorization: OAuth2Security
+    OAuth OAuth2Security = (OAuth) defaultClient.getAuthentication("OAuth2Security");
+    OAuth2Security.setAccessToken("YOUR ACCESS TOKEN");
+
+    ApIsApi apiInstance = new ApIsApi(defaultClient);
+    String type = "type_example"; // String | Type of the resource to be retrieved using the generated url (Ex - wsdl)
+    String apiId = "apiId_example"; // String | **API ID** consisting of the **UUID** of the API. 
+    String environmentName = "environmentName_example"; // String | Name of the API gateway environment. 
+    String xWSO2Tenant = "xWSO2Tenant_example"; // String | For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from. 
+    try {
+      String result = apiInstance.generateDefinitionURL(type, apiId, environmentName, xWSO2Tenant);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling ApIsApi#generateDefinitionURL");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **type** | **String**| Type of the resource to be retrieved using the generated url (Ex - wsdl) | [enum: wsdl]
+ **apiId** | **String**| **API ID** consisting of the **UUID** of the API.  |
+ **environmentName** | **String**| Name of the API gateway environment.  | [optional]
+ **xWSO2Tenant** | **String**| For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  | [optional]
+
+### Return type
+
+**String**
+
+### Authorization
+
+[OAuth2Security](../README.md#OAuth2Security)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK. Returns generated download URL as a string. |  -  |
+**400** | Bad Request. Invalid request or validation error. |  -  |
+**401** | Unauthorized. The user is not authorized. |  -  |
+**404** | Not Found. The specified resource does not exist. |  -  |
+**500** | Internal Server Error. |  -  |
+
 <a name="getWSDLOfAPI"></a>
 # **getWSDLOfAPI**
-> getWSDLOfAPI(apiId, environmentName, ifNoneMatch, xWSO2Tenant)
+> getWSDLOfAPI(apiId, environmentName, ifNoneMatch, xWSO2Tenant, format, exp, sig, xWSO2TenantQ)
 
 Get API WSDL definition
 
@@ -491,8 +569,12 @@ public class Example {
     String environmentName = "environmentName_example"; // String | Name of the API gateway environment. 
     String ifNoneMatch = "ifNoneMatch_example"; // String | Validator for conditional requests; based on the ETag of the formerly retrieved variant of the resourec. 
     String xWSO2Tenant = "xWSO2Tenant_example"; // String | For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from. 
+    String format = "format_example"; // String | If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip. 
+    Long exp = 56L; // Long | Time of expiration of the generated URL. 
+    String sig = "sig_example"; // String | Signature to validate of the generated URL. 
+    String xWSO2TenantQ = "xWSO2TenantQ_example"; // String | For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from. 
     try {
-      apiInstance.getWSDLOfAPI(apiId, environmentName, ifNoneMatch, xWSO2Tenant);
+      apiInstance.getWSDLOfAPI(apiId, environmentName, ifNoneMatch, xWSO2Tenant, format, exp, sig, xWSO2TenantQ);
     } catch (ApiException e) {
       System.err.println("Exception when calling ApIsApi#getWSDLOfAPI");
       System.err.println("Status code: " + e.getCode());
@@ -512,6 +594,10 @@ Name | Type | Description  | Notes
  **environmentName** | **String**| Name of the API gateway environment.  | [optional]
  **ifNoneMatch** | **String**| Validator for conditional requests; based on the ETag of the formerly retrieved variant of the resourec.  | [optional]
  **xWSO2Tenant** | **String**| For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  | [optional]
+ **format** | **String**| If format is wsdl, send the content of the main WSDL file and not the archived WSDL. If not defined, send the zip.  | [optional]
+ **exp** | **Long**| Time of expiration of the generated URL.  | [optional]
+ **sig** | **String**| Signature to validate of the generated URL.  | [optional]
+ **xWSO2TenantQ** | **String**| For cross-tenant invocations, this is used to specify the tenant domain, where the resource need to be   retrieved from.  | [optional]
 
 ### Return type
 
